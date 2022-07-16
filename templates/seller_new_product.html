@@ -1,0 +1,990 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Add a product{% endblock title %}
+{% block main-content %}
+<div class="container my-5 mx-1">
+    <div class="row">
+        <h5>Welcome {{user}}</h5>
+        <div class="col-sm-2 border-end px-1">
+            <ul class="list-unstyled">
+                <li class="d-grid"><a href="{% url 'seller_view_products' %}" class="btn">View your products</a></li>
+                <li class="d-grid"><a href="{% url 'seller_new_product' %}" class="btn btn-secondary">Add a product</a></li>
+            </ul>
+        </div>
+        <div class="col-sm-8 offset-sm-1">
+            <form action="seller_new_product" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <h6 id="message" class="text-danger text-center"></h6>
+                {% for message in messages %}
+                <h6 class="text-danger text-center">{{message}}</h6>
+                {% endfor %}
+                <div class="col-12 pb-3">
+                    <label for="title" class="form-label">Title*</label>
+                    <input type="text" class="form-control" id="title" name="title"
+                        placeholder="Enter product title">
+                </div>
+                <div class="col-12 pb-3">
+                    <label for="brand" class="form-label">Brand*</label>
+                    <input type="text" class="form-control" id="brand" name="brand" placeholder="Enter brand name">
+                </div>
+                <div class="col-12 pb-3">
+                    <label for="mrp" class="form-label">Market price*</label>
+                    <input type="text" class="form-control" id="mrp" name="mrp"
+                        placeholder="Enter MRP">
+                </div>
+                <div class="col-12 pb-3">
+                    <label for="price" class="form-label">Discounted price*</label>
+                    <input type="text" class="form-control" id="price" name="price" placeholder="Enter selling price">
+                </div>
+                <div class="col-12 pb-3">
+                    <label for="image" class="form-label">Upload Images*</label>
+                    <input class="form-control mb-2" type="file" id="image" name="image">
+                </div>
+                <div class="col-12 pb-3">
+                    <label for="category" class="form-label">Category*</label>
+                    <select id="category" name="category" class="form-select">
+                        <option selected disabled>Select Category</option>
+                        <option>Men's</option>
+                        <option>Women's</option>
+                        <option>Kid's</option>
+                    </select>
+                </div>
+                <div class="col-12 pb-3">
+                    <label for="sub-category" class="form-label">Sub-Category*</label>
+                    <select id="sub-category" name="sub-category" class="form-select">
+                        <option selected disabled>Select Sub-Category</option>
+                        <option>Top-wear</option>
+                        <option>Bottom-wear</option>
+                        <option>Foot-wear</option>
+                    </select>
+                </div>
+                
+                <div class="col-12 pb-3">
+                    <label for="size" class="form-label">Sizes available*</label>
+                    <div class="mx-sm-2 mb-1" id="size-1">
+                        <div style="display:flex;">
+                            <div class="col-sm-6 align-self-center">
+                                <input type="checkbox" id="size-1-check" name="size-check" value="S">
+                                <label id="size-1-label" for="size-check">Small (S)</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="size-1-quantity" class="form-label">Quantity*</label>
+                                <input type="text" class="form-control-flex" id="size-1-quantity" name="size-1-quantity"
+                                    placeholder="Quantity" value=0>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mx-sm-2 mb-1" id="size-2">
+                        <div style=" display:flex;">
+                            <div class="col-sm-6 align-self-center">
+                                <input type="checkbox" id="size-2-check" name="size-check" value="M">
+                                <label id="size-2-label" for="size-check">Medium (M)</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="size-2-quantity" class="form-label">Quantity*</label>
+                                <input type="text" class="form-control-flex" id="size-2-quantity" name="size-2-quantity" placeholder="Quantity"
+                                value=0>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mx-sm-2 mb-1" id="size-3">
+                        <div style=" display:flex;">
+                            <div class="col-sm-6 align-self-center">
+                                <input type="checkbox" id="size-3-check" name="size-check" value="L">
+                                <label id="size-3-label" for="size-check">Large (L)</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="size-3-quantity" class="form-label">Quantity*</label>
+                                <input type="text" class="form-control-flex" id="size-3-quantity" name="size-3-quantity" placeholder="Quantity"
+                                value=0>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mx-sm-2 mb-1" id="size-4">
+                        <div style=" display:flex;">
+                            <div class="col-sm-6 align-self-center">
+                                <input type="checkbox" id="size-4-check" name="size-check" value="XL">
+                                <label id="size-4-label" for="size-check">Extra Large (XL)</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="size-4-quantity" class="form-label">Quantity*</label>
+                                <input type="text" class="form-control-flex" id="size-4-quantity" name="size-4-quantity"
+                                    placeholder="Quantity" value=0>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="size-5">
+                    </div>
+                    <div id="size-6">
+                    </div>
+                    <div id="size-7">
+                    </div>
+                    <div id="size-8">
+                    </div>
+                    <div id="size-9">
+                    </div>
+                    <div id="size-10">
+                    </div>
+                    <div id="size-11">
+                    </div>
+                    <div id="size-12">
+                    </div>
+                    <div id="size-13">
+                    </div>
+                    <div id="size-14">
+                    </div>
+                    <div id="size-15">
+                    </div>
+                </div>
+                
+                <div class="col-12 pb-3">
+                    <label for="description" class="form-label">Description*</label>
+                    <textarea id="description" name="description" class="form-control" rows="5" placeholder="Enter each description in a new line..."></textarea>
+                </div>
+                <div class="col-12 mt-3">
+                    <button type="submit" class="btn btn-danger">Add Product</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+<script>
+    $("#sub-category").change(function () {
+        console.log("Entered");
+        const category = $('#category').val();
+        const sub_category = $('#sub-category').val();
+        console.log(category);
+        console.log(sub_category);
+        if(!category){
+            console.log("Category is Empty");
+            $("#message").html("Please select Category");
+        }   
+        else{
+            if(category == 'Men\'s' || category == 'Women\'s'){
+                if (sub_category == "Top-wear") {
+                    $("#size-1-label").html("Small (S)");
+                    $("#size-1-check").val("S");
+                    $("#size-2-label").html("Medium (M)");
+                    $("#size-2-check").val("M");
+                    $("#size-3-label").html("Large (L)");
+                    $("#size-3-check").val("L");
+                    $("#size-4-label").html("Extra Large (XL)");
+                    $("#size-4-check").val("XL");
+                    $("#size-5").html("");
+                    $("#size-6").html("");
+                    $("#size-7").html("");
+                    $("#size-8").html("");
+                    $("#size-9").html("");
+                    $("#size-10").html("");
+                    $("#size-11").html("");
+                    $("#size-12").html("");
+                    $("#size-13").html("");
+                    $("#size-14").html("");
+                    $("#size-15").html("");
+                }
+                else if (sub_category == "Bottom-wear") {
+                    $("#size-1-label").html("28");
+                    $("#size-1-check").val("28");
+                    $("#size-2-label").html("30");
+                    $("#size-2-check").val("30");
+                    $("#size-3-label").html("32");
+                    $("#size-3-check").val("32");
+                    $("#size-4-label").html("34");
+                    $("#size-4-check").val("34");
+                    let temp = `
+                        <div class="mx-sm-2 mb-1">
+                            <div style=" display:flex;">
+                                <div class="col-sm-6 align-self-center">
+                                    <input type="checkbox" id="size-5-check" name="size-check" value="36">
+                                    <label id="size-5-label" for="size-check">36</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="size-5-quantity" class="form-label">Quantity*</label>
+                                    <input type="text" class="form-control-flex" id="size-5-quantity" name="size-5-quantity"
+                                        placeholder="Quantity" value=0>
+                                </div>
+                            </div>
+                        </div>`;
+                    $("#size-5").html(temp);
+                    $("#size-6").html("");
+                    $("#size-7").html("");
+                    $("#size-8").html("");
+                    $("#size-9").html("");
+                    $("#size-10").html("");
+                    $("#size-11").html("");
+                    $("#size-12").html("");
+                    $("#size-13").html("");
+                    $("#size-14").html("");
+                    $("#size-15").html("");
+                }
+                else {
+                    $("#size-1-label").html("UK-6");
+                    $("#size-1-check").val("UK-6");
+                    $("#size-2-label").html("UK-7");
+                    $("#size-2-check").val("UK-7");
+                    $("#size-3-label").html("UK-8");
+                    $("#size-3-check").val("UK-8");
+                    $("#size-4-label").html("UK-9");
+                    $("#size-4-check").val("UK-9");
+                    let temp = `
+                        <div class="mx-sm-2 mb-1">
+                            <div style=" display:flex;">
+                                <div class="col-sm-6 align-self-center">
+                                    <input type="checkbox" id="size-5-check" name="size-check" value="UK-10">
+                                    <label id="size-5-label" for="size-check">UK-10</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="size-5-quantity" class="form-label">Quantity*</label>
+                                    <input type="text" class="form-control-flex" id="size-5-quantity" name="size-5-quantity"
+                                        placeholder="Quantity" value=0>
+                                </div>
+                            </div>
+                        </div>`;
+                    $("#size-5").html(temp);
+                    let temp1 = `
+                        <div class="mx-sm-2 mb-1">
+                            <div style=" display:flex;">
+                                <div class="col-sm-6 align-self-center">
+                                    <input type="checkbox" id="size-6-check" name="size-check" value="UK-11">
+                                    <label id="size-6-label" for="size-check">UK-11</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="size-6-quantity" class="form-label">Quantity*</label>
+                                    <input type="text" class="form-control-flex" id="size-6-quantity" name="size-6-quantity"
+                                        placeholder="Quantity" value=0>
+                                </div>
+                            </div>
+                        </div>`;
+                    $("#size-6").html(temp1);
+                    $("#size-7").html("");
+                    $("#size-8").html("");
+                    $("#size-9").html("");
+                    $("#size-10").html("");
+                    $("#size-11").html("");
+                    $("#size-12").html("");
+                    $("#size-13").html("");
+                    $("#size-14").html("");
+                    $("#size-15").html("");
+                }
+            }
+            else{
+                if(sub_category == 'Top-wear' || sub_category == 'Bottom-wear'){
+                    $("#size-1-label").html("1-2Y");
+                    $("#size-1-check").val("1-2Y");
+                    $("#size-2-label").html("2-3Y");
+                    $("#size-2-check").val("2-3Y");
+                    $("#size-3-label").html("3-4Y");
+                    $("#size-3-check").val("3-4Y");
+                    $("#size-4-label").html("4-5Y");
+                    $("#size-4-check").val("4-5Y");
+                    let temp = `
+                        <div class="mx-sm-2 mb-1">
+                            <div style=" display:flex;">
+                                <div class="col-sm-6 align-self-center">
+                                    <input type="checkbox" id="size-5-check" name="size-check" value="5-6Y">
+                                    <label id="size-5-label" for="size-check">5-6Y</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="size-5-quantity" class="form-label">Quantity*</label>
+                                    <input type="text" class="form-control-flex" id="size-5-quantity" name="size-5-quantity"
+                                        placeholder="Quantity" value=0>
+                                </div>
+                            </div>
+                        </div>`;
+                    $("#size-5").html(temp);
+                    let temp1 = `
+                        <div class="mx-sm-2 mb-1">
+                            <div style=" display:flex;">
+                                <div class="col-sm-6 align-self-center">
+                                    <input type="checkbox" id="size-6-check" name="size-check" value="6-7Y">
+                                    <label id="size-6-label" for="size-check">6-7Y</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="size-6-quantity" class="form-label">Quantity*</label>
+                                    <input type="text" class="form-control-flex" id="size-6-quantity" name="size-6-quantity"
+                                        placeholder="Quantity" value=0>
+                                </div>
+                            </div>
+                        </div>`;
+                    $("#size-6").html(temp1);
+                    temp = `
+                        <div class="mx-sm-2 mb-1">
+                            <div style=" display:flex;">
+                                <div class="col-sm-6 align-self-center">
+                                    <input type="checkbox" id="size-7-check" name="size-check" value="7-8Y">
+                                    <label id="size-7-label" for="size-check">7-8Y</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="size-7-quantity" class="form-label">Quantity*</label>
+                                    <input type="text" class="form-control-flex" id="size-7-quantity" name="size-7-quantity"
+                                        placeholder="Quantity" value=0>
+                                </div>
+                            </div>
+                        </div>`;
+                    $("#size-7").html(temp);
+                    temp = `
+                        <div class="mx-sm-2 mb-1">
+                            <div style=" display:flex;">
+                                <div class="col-sm-6 align-self-center">
+                                    <input type="checkbox" id="size-8-check" name="size-check" value="8-9Y">
+                                    <label id="size-8-label" for="size-check">8-9Y</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="size-8-quantity" class="form-label">Quantity*</label>
+                                    <input type="text" class="form-control-flex" id="size-8-quantity" name="size-8-quantity"
+                                        placeholder="Quantity" value=0>
+                                </div>
+                            </div>
+                        </div>`;
+                    $("#size-8").html(temp);
+                    temp = `
+                        <div class="mx-sm-2 mb-1">
+                            <div style=" display:flex;">
+                                <div class="col-sm-6 align-self-center">
+                                    <input type="checkbox" id="size-9-check" name="size-check" value="9-10Y">
+                                    <label id="size-9-label" for="size-check">9-10Y</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="size-9-quantity" class="form-label">Quantity*</label>
+                                    <input type="text" class="form-control-flex" id="size-9-quantity" name="size-9-quantity"
+                                        placeholder="Quantity" value=0>
+                                </div>
+                            </div>
+                        </div>`;
+                    $("#size-9").html(temp);
+                    temp = `
+                        <div class="mx-sm-2 mb-1">
+                            <div style=" display:flex;">
+                                <div class="col-sm-6 align-self-center">
+                                    <input type="checkbox" id="size-10-check" name="size-check" value="10-11Y">
+                                    <label id="size-10-label" for="size-check">10-11Y</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="size-10-quantity" class="form-label">Quantity*</label>
+                                    <input type="text" class="form-control-flex" id="size-10-quantity" name="size-10-quantity"
+                                        placeholder="Quantity" value=0>
+                                </div>
+                            </div>
+                        </div>`;
+                    $("#size-10").html(temp);
+                    temp = `
+                        <div class="mx-sm-2 mb-1">
+                            <div style=" display:flex;">
+                                <div class="col-sm-6 align-self-center">
+                                    <input type="checkbox" id="size-11-check" name="size-check" value="11-12Y">
+                                    <label id="size-11-label" for="size-check">11-12Y</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="size-11-quantity" class="form-label">Quantity*</label>
+                                    <input type="text" class="form-control-flex" id="size-11-quantity" name="size-11-quantity"
+                                        placeholder="Quantity" value=0>
+                                </div>
+                            </div>
+                        </div>`;
+                    $("#size-11").html(temp);
+                    $("#size-12").html("");
+                    $("#size-13").html("");
+                    $("#size-14").html("");
+                    $("#size-15").html("");
+                    }
+                else{
+                    $("#size-1-label").html("1-1.5Y");
+                    $("#size-1-check").val("1-1.5Y");
+                    $("#size-2-label").html("1.5-2Y");
+                    $("#size-2-check").val("1.5-2Y");
+                    $("#size-3-label").html("2-2.5Y");
+                    $("#size-3-check").val("2-2.5Y");
+                    $("#size-4-label").html("2.5-3Y");
+                    $("#size-4-check").val("2.5-3Y");
+                    let temp = `
+                        <div class="mx-sm-2 mb-1">
+                            <div style=" display:flex;">
+                                <div class="col-sm-6 align-self-center">
+                                    <input type="checkbox" id="size-5-check" name="size-check" value="3-3.5Y">
+                                    <label id="size-5-label" for="size-check">3-3.5Y</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="size-5-quantity" class="form-label">Quantity*</label>
+                                    <input type="text" class="form-control-flex" id="size-5-quantity" name="size-5-quantity"
+                                        placeholder="Quantity" value=0>
+                                </div>
+                            </div>
+                        </div>`;
+                    $("#size-5").html(temp);
+                    let temp1 = `
+                        <div class="mx-sm-2 mb-1">
+                            <div style=" display:flex;">
+                                <div class="col-sm-6 align-self-center">
+                                    <input type="checkbox" id="size-6-check" name="size-check" value="3.5-4Y">
+                                    <label id="size-6-label" for="size-check">3.5-4Y</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="size-6-quantity" class="form-label">Quantity*</label>
+                                    <input type="text" class="form-control-flex" id="size-6-quantity" name="size-6-quantity"
+                                        placeholder="Quantity" value=0>
+                                </div>
+                            </div>
+                        </div>`;
+                    $("#size-6").html(temp1);
+                    temp = `
+                        <div class="mx-sm-2 mb-1">
+                            <div style=" display:flex;">
+                                <div class="col-sm-6 align-self-center">
+                                    <input type="checkbox" id="size-7-check" name="size-check" value="4-4.5Y">
+                                    <label id="size-7-label" for="size-check">4-4.5Y</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="size-7-quantity" class="form-label">Quantity*</label>
+                                    <input type="text" class="form-control-flex" id="size-7-quantity" name="size-7-quantity"
+                                        placeholder="Quantity" value=0>
+                                </div>
+                            </div>
+                        </div>`;
+                    $("#size-7").html(temp);
+                    temp = `
+                        <div class="mx-sm-2 mb-1">
+                            <div style=" display:flex;">
+                                <div class="col-sm-6 align-self-center">
+                                    <input type="checkbox" id="size-8-check" name="size-check" value="4.5-5Y">
+                                    <label id="size-8-label" for="size-check">4.5-5Y</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="size-8-quantity" class="form-label">Quantity*</label>
+                                    <input type="text" class="form-control-flex" id="size-8-quantity" name="size-8-quantity"
+                                        placeholder="Quantity" value=0>
+                                </div>
+                            </div>
+                        </div>`;
+                    $("#size-8").html(temp);
+                    temp = `
+                        <div class="mx-sm-2 mb-1">
+                            <div style=" display:flex;">
+                                <div class="col-sm-6 align-self-center">
+                                    <input type="checkbox" id="size-9-check" name="size-check" value="5-6Y">
+                                    <label id="size-9-label" for="size-check">5-6Y</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="size-9-quantity" class="form-label">Quantity*</label>
+                                    <input type="text" class="form-control-flex" id="size-9-quantity" name="size-9-quantity"
+                                        placeholder="Quantity" value=0>
+                                </div>
+                            </div>
+                        </div>`;
+                    $("#size-9").html(temp);
+                    temp = `
+                        <div class="mx-sm-2 mb-1">
+                            <div style=" display:flex;">
+                                <div class="col-sm-6 align-self-center">
+                                    <input type="checkbox" id="size-10-check" name="size-check" value="6-7Y">
+                                    <label id="size-10-label" for="size-check">6-7Y</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="size-10-quantity" class="form-label">Quantity*</label>
+                                    <input type="text" class="form-control-flex" id="size-10-quantity" name="size-10-quantity"
+                                        placeholder="Quantity" value=0>
+                                </div>
+                            </div>
+                        </div>`;
+                    $("#size-10").html(temp);
+                    temp = `
+                        <div class="mx-sm-2 mb-1">
+                            <div style=" display:flex;">
+                                <div class="col-sm-6 align-self-center">
+                                    <input type="checkbox" id="size-11-check" name="size-check" value="7-8Y">
+                                    <label id="size-11-label" for="size-check">7-8Y</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="size-11-quantity" class="form-label">Quantity*</label>
+                                    <input type="text" class="form-control-flex" id="size-11-quantity" name="size-11-quantity"
+                                        placeholder="Quantity" value=0>
+                                </div>
+                            </div>
+                        </div>`;
+                    $("#size-11").html(temp);
+                    temp = `
+                        <div class="mx-sm-2 mb-1">
+                            <div style=" display:flex;">
+                                <div class="col-sm-6 align-self-center">
+                                    <input type="checkbox" id="size-12-check" name="size-check" value="8-9Y">
+                                    <label id="size-12-label" for="size-check">8-9Y</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="size-12-quantity" class="form-label">Quantity*</label>
+                                    <input type="text" class="form-control-flex" id="size-12-quantity" name="size-12-quantity"
+                                        placeholder="Quantity" value=0>
+                                </div>
+                            </div>
+                        </div>`;
+                    $("#size-12").html(temp);
+                    temp = `
+                        <div class="mx-sm-2 mb-1">
+                            <div style=" display:flex;">
+                                <div class="col-sm-6 align-self-center">
+                                    <input type="checkbox" id="size-13-check" name="size-check" value="9-10Y">
+                                    <label id="size-13-label" for="size-check">9-10Y</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="size-13-quantity" class="form-label">Quantity*</label>
+                                    <input type="text" class="form-control-flex" id="size-13-quantity" name="size-13-quantity"
+                                        placeholder="Quantity" value=0>
+                                </div>
+                            </div>
+                        </div>`;
+                    $("#size-13").html(temp);
+                    temp = `
+                        <div class="mx-sm-2 mb-1">
+                            <div style=" display:flex;">
+                                <div class="col-sm-6 align-self-center">
+                                    <input type="checkbox" id="size-14-check" name="size-check" value="10-11Y">
+                                    <label id="size-14-label" for="size-check">10-11Y</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="size-14-quantity" class="form-label">Quantity*</label>
+                                    <input type="text" class="form-control-flex" id="size-14-quantity" name="size-14-quantity"
+                                        placeholder="Quantity" value=0>
+                                </div>
+                            </div>
+                        </div>`;
+                    $("#size-14").html(temp);
+                    temp = `
+                        <div class="mx-sm-2 mb-1">
+                            <div style=" display:flex;">
+                                <div class="col-sm-6 align-self-center">
+                                    <input type="checkbox" id="size-15-check" name="size-check" value="11-12Y">
+                                    <label id="size-15-label" for="size-check">11-12Y</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="size-15-quantity" class="form-label">Quantity*</label>
+                                    <input type="text" class="form-control-flex" id="size-15-quantity" name="size-15-quantity"
+                                        placeholder="Quantity" value=0>
+                                </div>
+                            </div>
+                        </div>`;
+                    $("#size-15").html(temp);
+                }  
+            }
+        }
+    });
+</script>
+<script>
+    $("#category").change(function () {
+            console.log("Entered");
+            const category = $('#category').val();
+            const sub_category = $('#sub-category').val();
+            console.log(category);
+            console.log(sub_category);
+            if (!sub_category) {
+                
+            }
+            else {
+                if (category == 'Men\'s' || category == 'Women\'s') {
+                    if (sub_category == "Top-wear") {
+                        $("#size-1-label").html("Small (S)");
+                        $("#size-1-check").val("S");
+                        $("#size-2-label").html("Medium (M)");
+                        $("#size-2-check").val("M");
+                        $("#size-3-label").html("Large (L)");
+                        $("#size-3-check").val("L");
+                        $("#size-4-label").html("Extra Large (XL)");
+                        $("#size-4-check").val("XL");
+                        $("#size-5").html("");
+                        $("#size-6").html("");
+                        $("#size-7").html("");
+                        $("#size-8").html("");
+                        $("#size-9").html("");
+                        $("#size-10").html("");
+                        $("#size-11").html("");
+                        $("#size-12").html("");
+                        $("#size-13").html("");
+                        $("#size-14").html("");
+                        $("#size-15").html("");
+                    }
+                    else if (sub_category == "Bottom-wear") {
+                        $("#size-1-label").html("28");
+                        $("#size-1-check").val("28");
+                        $("#size-2-label").html("30");
+                        $("#size-2-check").val("30");
+                        $("#size-3-label").html("32");
+                        $("#size-3-check").val("32");
+                        $("#size-4-label").html("34");
+                        $("#size-4-check").val("34");
+                        let temp = `
+                        <div class="mx-sm-2 mb-1">
+                            <div style=" display:flex;">
+                                <div class="col-sm-6 align-self-center">
+                                    <input type="checkbox" id="size-5-check" name="size-check" value="36">
+                                    <label id="size-5-label" for="size-check">36</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="size-5-quantity" class="form-label">Quantity*</label>
+                                    <input type="text" class="form-control-flex" id="size-5-quantity" name="size-5-quantity"
+                                        placeholder="Quantity" value=0>
+                                </div>
+                            </div>
+                        </div>`;
+                        $("#size-5").html(temp);
+                        $("#size-6").html("");
+                        $("#size-7").html("");
+                        $("#size-8").html("");
+                        $("#size-9").html("");
+                        $("#size-10").html("");
+                        $("#size-11").html("");
+                        $("#size-12").html("");
+                        $("#size-13").html("");
+                        $("#size-14").html("");
+                        $("#size-15").html("");
+                    }
+                    else {
+                        $("#size-1-label").html("UK-6");
+                        $("#size-1-check").val("UK-6");
+                        $("#size-2-label").html("UK-7");
+                        $("#size-2-check").val("UK-7");
+                        $("#size-3-label").html("UK-8");
+                        $("#size-3-check").val("UK-8");
+                        $("#size-4-label").html("UK-9");
+                        $("#size-4-check").val("UK-9");
+                        let temp = `
+                        <div class="mx-sm-2 mb-1">
+                            <div style=" display:flex;">
+                                <div class="col-sm-6 align-self-center">
+                                    <input type="checkbox" id="size-5-check" name="size-check" value="UK-10">
+                                    <label id="size-5-label" for="size-check">UK-10</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="size-5-quantity" class="form-label">Quantity*</label>
+                                    <input type="text" class="form-control-flex" id="size-5-quantity" name="size-5-quantity"
+                                        placeholder="Quantity" value=0>
+                                </div>
+                            </div>
+                        </div>`;
+                        $("#size-5").html(temp);
+                        let temp1 = `
+                        <div class="mx-sm-2 mb-1">
+                            <div style=" display:flex;">
+                                <div class="col-sm-6 align-self-center">
+                                    <input type="checkbox" id="size-6-check" name="size-check" value="UK-11">
+                                    <label id="size-6-label" for="size-check">UK-11</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="size-6-quantity" class="form-label">Quantity*</label>
+                                    <input type="text" class="form-control-flex" id="size-6-quantity" name="size-6-quantity"
+                                        placeholder="Quantity" value=0>
+                                </div>
+                            </div>
+                        </div>`;
+                        $("#size-6").html(temp1);
+                        $("#size-7").html("");
+                        $("#size-8").html("");
+                        $("#size-9").html("");
+                        $("#size-10").html("");
+                        $("#size-11").html("");
+                        $("#size-12").html("");
+                        $("#size-13").html("");
+                        $("#size-14").html("");
+                        $("#size-15").html("");
+                    }
+                }
+                else {
+                    if (sub_category == 'Top-wear' || sub_category == 'Bottom-wear') {
+                        $("#size-1-label").html("1-2Y");
+                        $("#size-1-check").val("1-2Y");
+                        $("#size-2-label").html("2-3Y");
+                        $("#size-2-check").val("2-3Y");
+                        $("#size-3-label").html("3-4Y");
+                        $("#size-3-check").val("3-4Y");
+                        $("#size-4-label").html("4-5Y");
+                        $("#size-4-check").val("4-5Y");
+                        let temp = `
+                        <div class="mx-sm-2 mb-1">
+                            <div style=" display:flex;">
+                                <div class="col-sm-6 align-self-center">
+                                    <input type="checkbox" id="size-5-check" name="size-check" value="5-6Y">
+                                    <label id="size-5-label" for="size-check">5-6Y</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="size-5-quantity" class="form-label">Quantity*</label>
+                                    <input type="text" class="form-control-flex" id="size-5-quantity" name="size-5-quantity"
+                                        placeholder="Quantity" value=0>
+                                </div>
+                            </div>
+                        </div>`;
+                        $("#size-5").html(temp);
+                        let temp1 = `
+                        <div class="mx-sm-2 mb-1">
+                            <div style=" display:flex;">
+                                <div class="col-sm-6 align-self-center">
+                                    <input type="checkbox" id="size-6-check" name="size-check" value="6-7Y">
+                                    <label id="size-6-label" for="size-check">6-7Y</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="size-6-quantity" class="form-label">Quantity*</label>
+                                    <input type="text" class="form-control-flex" id="size-6-quantity" name="size-6-quantity"
+                                        placeholder="Quantity" value=0>
+                                </div>
+                            </div>
+                        </div>`;
+                        $("#size-6").html(temp1);
+                        temp = `
+                        <div class="mx-sm-2 mb-1">
+                            <div style=" display:flex;">
+                                <div class="col-sm-6 align-self-center">
+                                    <input type="checkbox" id="size-7-check" name="size-check" value="7-8Y">
+                                    <label id="size-7-label" for="size-check">7-8Y</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="size-7-quantity" class="form-label">Quantity*</label>
+                                    <input type="text" class="form-control-flex" id="size-7-quantity" name="size-7-quantity"
+                                        placeholder="Quantity" value=0>
+                                </div>
+                            </div>
+                        </div>`;
+                        $("#size-7").html(temp);
+                        temp = `
+                        <div class="mx-sm-2 mb-1">
+                            <div style=" display:flex;">
+                                <div class="col-sm-6 align-self-center">
+                                    <input type="checkbox" id="size-8-check" name="size-check" value="8-9Y">
+                                    <label id="size-8-label" for="size-check">8-9Y</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="size-8-quantity" class="form-label">Quantity*</label>
+                                    <input type="text" class="form-control-flex" id="size-8-quantity" name="size-8-quantity"
+                                        placeholder="Quantity" value=0>
+                                </div>
+                            </div>
+                        </div>`;
+                        $("#size-8").html(temp);
+                        temp = `
+                        <div class="mx-sm-2 mb-1">
+                            <div style=" display:flex;">
+                                <div class="col-sm-6 align-self-center">
+                                    <input type="checkbox" id="size-9-check" name="size-check" value="9-10Y">
+                                    <label id="size-9-label" for="size-check">9-10Y</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="size-9-quantity" class="form-label">Quantity*</label>
+                                    <input type="text" class="form-control-flex" id="size-9-quantity" name="size-9-quantity"
+                                        placeholder="Quantity" value=0>
+                                </div>
+                            </div>
+                        </div>`;
+                        $("#size-9").html(temp);
+                        temp = `
+                        <div class="mx-sm-2 mb-1">
+                            <div style=" display:flex;">
+                                <div class="col-sm-6 align-self-center">
+                                    <input type="checkbox" id="size-10-check" name="size-check" value="10-11Y">
+                                    <label id="size-10-label" for="size-check">10-11Y</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="size-10-quantity" class="form-label">Quantity*</label>
+                                    <input type="text" class="form-control-flex" id="size-10-quantity" name="size-10-quantity"
+                                        placeholder="Quantity" value=0>
+                                </div>
+                            </div>
+                        </div>`;
+                        $("#size-10").html(temp);
+                        temp = `
+                        <div class="mx-sm-2 mb-1">
+                            <div style=" display:flex;">
+                                <div class="col-sm-6 align-self-center">
+                                    <input type="checkbox" id="size-11-check" name="size-check" value="11-12Y">
+                                    <label id="size-11-label" for="size-check">11-12Y</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="size-11-quantity" class="form-label">Quantity*</label>
+                                    <input type="text" class="form-control-flex" id="size-11-quantity" name="size-11-quantity"
+                                        placeholder="Quantity" value=0>
+                                </div>
+                            </div>
+                        </div>`;
+                        $("#size-11").html(temp);
+                        $("#size-12").html("");
+                        $("#size-13").html("");
+                        $("#size-14").html("");
+                        $("#size-15").html("");
+                    }
+                    else {
+                        $("#size-1-label").html("1-1.5Y");
+                        $("#size-1-check").val("1-1.5Y");
+                        $("#size-2-label").html("1.5-2Y");
+                        $("#size-2-check").val("1.5-2Y");
+                        $("#size-3-label").html("2-2.5Y");
+                        $("#size-3-check").val("2-2.5Y");
+                        $("#size-4-label").html("2.5-3Y");
+                        $("#size-4-check").val("2.5-3Y");
+                        let temp = `
+                        <div class="mx-sm-2 mb-1">
+                            <div style=" display:flex;">
+                                <div class="col-sm-6 align-self-center">
+                                    <input type="checkbox" id="size-5-check" name="size-check" value="3-3.5Y">
+                                    <label id="size-5-label" for="size-check">3-3.5Y</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="size-5-quantity" class="form-label">Quantity*</label>
+                                    <input type="text" class="form-control-flex" id="size-5-quantity" name="size-5-quantity"
+                                        placeholder="Quantity" value=0>
+                                </div>
+                            </div>
+                        </div>`;
+                        $("#size-5").html(temp);
+                        let temp1 = `
+                        <div class="mx-sm-2 mb-1">
+                            <div style=" display:flex;">
+                                <div class="col-sm-6 align-self-center">
+                                    <input type="checkbox" id="size-6-check" name="size-check" value="3.5-4Y">
+                                    <label id="size-6-label" for="size-check">3.5-4Y</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="size-6-quantity" class="form-label">Quantity*</label>
+                                    <input type="text" class="form-control-flex" id="size-6-quantity" name="size-6-quantity"
+                                        placeholder="Quantity" value=0>
+                                </div>
+                            </div>
+                        </div>`;
+                        $("#size-6").html(temp1);
+                        temp = `
+                        <div class="mx-sm-2 mb-1">
+                            <div style=" display:flex;">
+                                <div class="col-sm-6 align-self-center">
+                                    <input type="checkbox" id="size-7-check" name="size-check" value="4-4.5Y">
+                                    <label id="size-7-label" for="size-check">4-4.5Y</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="size-7-quantity" class="form-label">Quantity*</label>
+                                    <input type="text" class="form-control-flex" id="size-7-quantity" name="size-7-quantity"
+                                        placeholder="Quantity" value=0>
+                                </div>
+                            </div>
+                        </div>`;
+                        $("#size-7").html(temp);
+                        temp = `
+                        <div class="mx-sm-2 mb-1">
+                            <div style=" display:flex;">
+                                <div class="col-sm-6 align-self-center">
+                                    <input type="checkbox" id="size-8-check" name="size-check" value="4.5-5Y">
+                                    <label id="size-8-label" for="size-check">4.5-5Y</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="size-8-quantity" class="form-label">Quantity*</label>
+                                    <input type="text" class="form-control-flex" id="size-8-quantity" name="size-8-quantity"
+                                        placeholder="Quantity" value=0>
+                                </div>
+                            </div>
+                        </div>`;
+                        $("#size-8").html(temp);
+                        temp = `
+                        <div class="mx-sm-2 mb-1">
+                            <div style=" display:flex;">
+                                <div class="col-sm-6 align-self-center">
+                                    <input type="checkbox" id="size-9-check" name="size-check" value="5-6Y">
+                                    <label id="size-9-label" for="size-check">5-6Y</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="size-9-quantity" class="form-label">Quantity*</label>
+                                    <input type="text" class="form-control-flex" id="size-9-quantity" name="size-9-quantity"
+                                        placeholder="Quantity" value=0>
+                                </div>
+                            </div>
+                        </div>`;
+                        $("#size-9").html(temp);
+                        temp = `
+                        <div class="mx-sm-2 mb-1">
+                            <div style=" display:flex;">
+                                <div class="col-sm-6 align-self-center">
+                                    <input type="checkbox" id="size-10-check" name="size-check" value="6-7Y">
+                                    <label id="size-10-label" for="size-check">6-7Y</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="size-10-quantity" class="form-label">Quantity*</label>
+                                    <input type="text" class="form-control-flex" id="size-10-quantity" name="size-10-quantity"
+                                        placeholder="Quantity" value=0>
+                                </div>
+                            </div>
+                        </div>`;
+                        $("#size-10").html(temp);
+                        temp = `
+                        <div class="mx-sm-2 mb-1">
+                            <div style=" display:flex;">
+                                <div class="col-sm-6 align-self-center">
+                                    <input type="checkbox" id="size-11-check" name="size-check" value="7-8Y">
+                                    <label id="size-11-label" for="size-check">7-8Y</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="size-11-quantity" class="form-label">Quantity*</label>
+                                    <input type="text" class="form-control-flex" id="size-11-quantity" name="size-11-quantity"
+                                        placeholder="Quantity" value=0>
+                                </div>
+                            </div>
+                        </div>`;
+                        $("#size-11").html(temp);
+                        temp = `
+                        <div class="mx-sm-2 mb-1">
+                            <div style=" display:flex;">
+                                <div class="col-sm-6 align-self-center">
+                                    <input type="checkbox" id="size-12-check" name="size-check" value="8-9Y">
+                                    <label id="size-12-label" for="size-check">8-9Y</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="size-12-quantity" class="form-label">Quantity*</label>
+                                    <input type="text" class="form-control-flex" id="size-12-quantity" name="size-12-quantity"
+                                        placeholder="Quantity" value=0>
+                                </div>
+                            </div>
+                        </div>`;
+                        $("#size-12").html(temp);
+                        temp = `
+                        <div class="mx-sm-2 mb-1">
+                            <div style=" display:flex;">
+                                <div class="col-sm-6 align-self-center">
+                                    <input type="checkbox" id="size-13-check" name="size-check" value="9-10Y">
+                                    <label id="size-13-label" for="size-check">9-10Y</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="size-13-quantity" class="form-label">Quantity*</label>
+                                    <input type="text" class="form-control-flex" id="size-13-quantity" name="size-13-quantity"
+                                        placeholder="Quantity" value=0>
+                                </div>
+                            </div>
+                        </div>`;
+                        $("#size-13").html(temp);
+                        temp = `
+                        <div class="mx-sm-2 mb-1">
+                            <div style=" display:flex;">
+                                <div class="col-sm-6 align-self-center">
+                                    <input type="checkbox" id="size-14-check" name="size-check" value="10-11Y">
+                                    <label id="size-14-label" for="size-check">10-11Y</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="size-14-quantity" class="form-label">Quantity*</label>
+                                    <input type="text" class="form-control-flex" id="size-14-quantity" name="size-14-quantity"
+                                        placeholder="Quantity" value=0>
+                                </div>
+                            </div>
+                        </div>`;
+                        $("#size-14").html(temp);
+                        temp = `
+                        <div class="mx-sm-2 mb-1">
+                            <div style=" display:flex;">
+                                <div class="col-sm-6 align-self-center">
+                                    <input type="checkbox" id="size-15-check" name="size-check" value="11-12Y">
+                                    <label id="size-15-label" for="size-check">11-12Y</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="size-15-quantity" class="form-label">Quantity*</label>
+                                    <input type="text" class="form-control-flex" id="size-15-quantity" name="size-15-quantity"
+                                        placeholder="Quantity" value=0>
+                                </div>
+                            </div>
+                        </div>`;
+                        $("#size-15").html(temp);
+                    }
+                }
+            }
+        });
+</script>
+
+
+{% endblock main-content %}

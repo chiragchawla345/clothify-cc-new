@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Update Product{% endblock title %}
+{% block main-content %}
+<div class="container my-5 mx-1">
+    <div class="row">
+        <h5>Welcome {{user}}</h5>
+        <div class="col-sm-2 border-end px-1">
+            <ul class="list-unstyled">
+                <li class="d-grid"><a href="{% url 'seller_view_products' %}" class="btn">View your products</a></li>
+                <li class="d-grid"><a href="{% url 'seller_new_product' %}" class="btn btn-secondary">Add a product</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-sm-8 offset-sm-1">
+            <form action="/seller_update_product/{{item.id}}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <h6 id="message" class="text-danger text-center"></h6>
+                {% for message in messages %}
+                <h6 class="text-danger text-center">{{message}}</h6>
+                {% endfor %}
+                <div class="col-12 pb-3">
+                    <label for="title" class="form-label">Title*</label>
+                    <input type="text" class="form-control" id="title" name="title" placeholder="Enter product title" value="{{item.title}}" disabled>
+                </div>
+                <div class="col-12 pb-3">
+                    <label for="brand" class="form-label">Brand*</label>
+                    <input type="text" class="form-control" id="brand" name="brand" placeholder="Enter brand name" value="{{item.brand}}" disabled>
+                </div>
+                <div class="col-12 pb-3">
+                    <label for="mrp" class="form-label">Market price*</label>
+                    <input type="text" class="form-control" id="mrp" name="mrp" placeholder="Enter MRP" value="{{item.market_price}}">
+                </div>
+                <div class="col-12 pb-3">
+                    <label for="price" class="form-label">Discounted price*</label>
+                    <input type="text" class="form-control" id="price" name="price" placeholder="Enter selling price" value="{{item.discounted_price}}">
+                </div>
+                <div class="col-12 pb-3 d-flex">
+                    <div class="col-sm-6 text-start align-self-center">
+                        <img src={{item.image}} alt={{item.image}} style="height:300px;object-fit:cover"
+                            class="img-fluid img-thumbnail" id="image_display">
+                    </div>
+                    <div class="col-sm-6 text-start px-2 align-self-center">
+                        <label for="image" class="form-label align-middle">Upload New Image*</label>
+                        <input class="mb-2 align-middle" type="file" id="image" name="image">
+                    </div>
+                    
+                </div>
+                <div class="col-12 pb-3">
+                    <label for="category" class="form-label">Category*</label>
+                    <select id="category" name="category" class="form-select" disabled>
+                        {% if item.category == "Men's" %}
+                        <option selected >Men's</option>
+                        {% else %}
+                        <option>Men's</option>
+                        {% endif %}
+                        {% if item.category == "Women's" %}
+                        <option selected>Women's</option>
+                        {% else %}
+                        <option>Women's</option>
+                        {% endif %}
+                        {% if item.category == "Kid's" %}
+                        <option selected>Kid's</option>
+                        {% else %}
+                        <option>Kid's</option>
+                        {% endif %}
+                    </select>
+                </div>
+                <div class="col-12 pb-3">
+                    <label for="sub-category" class="form-label">Sub-Category*</label>
+                    <select id="sub-category" name="sub-category" class="form-select" value="{{item.sub_category}}" disabled>
+                        {% if item.sub_category == "Top-wear" %}
+                        <option selected>Top-wear</option>
+                        {% else %}
+                        <option>Top-wear</option>
+                        {% endif %}
+                        {% if item.sub_category == "Bottom-wear" %}
+                        <option selected>Bottom-wear</option>
+                        {% else %}
+                        <option>Bottom-wear</option>
+                        {% endif %}
+                        {% if item.sub_category == "Foot-wear" %}
+                        <option selected>Foot-wear</option>
+                        {% else %}
+                        <option>Foot-wear</option>
+                        {% endif %}
+                    </select>
+                </div>
+
+                <div class="col-12 pb-3">
+                    <label for="size" class="form-label">Sizes available*</label>
+                    {% for size, properties in size.items %}
+                    {% if properties.quantity == -1 %}
+                    <div class="mx-sm-2 mb-1" id="size-{{size}}">
+                        <div style="display:flex;">
+                            <div class="col-sm-6 align-self-center">
+                                <input type="checkbox" id="size-{{size}}-check" name="size-check" value="{{properties.value}}">
+                                <label id="size-1-label" for="size-check">{{properties.label}}</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="size-{{size}}-quantity" class="form-label">Quantity*</label>
+                                <input type="text" class="form-control-flex" id="size-{{size}}-quantity" name="size-{{size}}-quantity"
+                                    placeholder="Not Listed">
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="mx-sm-2 mb-1" id="size-{{size}}">
+                        <div style="display:flex;">
+                            <div class="col-sm-6 align-self-center">
+                                <input type="checkbox" id="size-{{size}}-check" name="size-check" value="{{properties.value}}" checked>
+                                <label id="size-1-label" for="size-check">{{properties.label}}</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="size-{{size}}-quantity" class="form-label">Quantity*</label>
+                                <input type="text" class="form-control-flex" id="size-{{size}}-quantity" name="size-{{size}}-quantity"
+                                    placeholder="Quantity" value="{{properties.quantity}}">
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                    
+                </div>
+
+                <div class="col-12 pb-3">
+                    <label for="description" class="form-label">Description*</label>
+                    <textarea id="description" name="description" class="form-control" rows="5"
+                        placeholder="Enter each description in a new line...">{{item.description}}</textarea>
+                </div>
+                <div class="col-12 mt-3">
+                    <button type="submit" name="update_product" class="btn btn-danger">Update Product Details</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+<script>
+    image.onchange = evt => {
+            const [file] = image.files
+            if (file) {
+                image_display.src = URL.createObjectURL(file)
+            }
+        }
+</script>
+
+
+{% endblock main-content %}

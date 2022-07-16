@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Add Address{% endblock title %}
+{% block main-content %}
+<div class="container my-5 mx-1">
+ <div class="row">
+  <h5>Welcome {{user}}</h5>
+  <div class="col-sm-2 border-end px-1">
+   <ul class="list-unstyled">
+    <li class="d-grid"><a href="{% url 'profile' %}" class="btn">Profile</a></li>
+    <li class="d-grid"><a href="{% url 'address' %}" class="btn btn-secondary">Address</a></li>
+   </ul>
+  </div>
+  <div class="col-sm-9 offset-sm-1">
+   <div class="row">
+    {% for address, properties in addresses.items %}
+    <div class="col-sm-6 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h4>Address {{address}}</h4>
+                <p class="mb-0">Name : {{properties.name}}</p>
+                <p class="mb-0">Address : {{properties.address1}}, {{properties.address2}}</p>
+                <p class="mb-0">City : {{properties.city}}</p>
+                <p class="mb-0">State : {{properties.state}}</p>
+                <p class="mb-0">Zip : {{properties.zip}}</p>
+                <p class="mb-0">Country : {{properties.country}}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+   </div>
+  </div>
+ </div>
+</div>
+{% endblock main-content %}

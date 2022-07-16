@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Place Order{% endblock title %}
+{% block main-content %}
+<div class="container my-5">
+    <div class="row">
+        <h2 class="text-left mb-3">Order Summary</h2>
+        {% for message in messages %}
+        <h5 class="text-center mb-5" style="color:#00cc66">{{message}}</h5>
+        {% endfor %}
+        <div class="col-sm-8">
+            <div class="card">
+                <div class="card-body">
+
+                    {% for key, value in cart.items %}
+                    <div class="row">
+                        <div class="col-sm-3 text-center align-self-center"><img src={{value.image}} alt="" srcset=""
+                                class="img-fluid img-thumbnail shadow-sm" height="150" width="150"> </div>
+                        <div class="col-sm-9">
+                            <div>
+                                <h5>{{value.title}}</h5>
+                                <p class="mb-0 text-muted">Description: </p>
+                                {% for description_line in value.description %}
+                                <p class="mb-0 text-muted small">{{description_line}}</p>
+                                {% endfor %}
+                                <p class="mt-2 mb-0">Size : {{value.size}}</p>
+                                <div class="my-2">
+                                    <label for="quantity">Quantity :</label>
+                                    <span id={{value.product_id}}>{{value.quantity}}</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <p id="new_price_{{value.product_id}}" class="mb-0"><span>
+                                            Price : {{value.quantity}} x {{value.price}} = <strong>Rs.
+                                                {{value.total_price}}</strong></span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="text-muted">
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-body">
+                    <h3>The Total Amount of</h3>
+                    <ul class="list-group">
+                        <li id="total_sum" class="list-group-item border-0 px-0 py-1"><span>Amount : Rs.
+                                {{total_sum}}</span></li>
+                        <li class="list-group-item border-0 px-0 py-1"><span>Shipping : Rs. 70.00</span></li>
+                        <li class="list-group-item border-0 px-0 py-1 mb-3">
+                            <div id="total_sum_with_delivery">
+                                <span><strong>Total Amount</strong> <small> (including GST) : Rs.
+                                    </small>{{total_sum_with_delivery}}</span>
+                            </div>
+                            <!-- <span><strong>Rs. 500.00</strong></span> -->
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="mb-4">We accept</h5>
+                    <img src="{% static 'images/payment.png' %}" alt="" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock main-content %}

@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Seller Product Detail{% endblock title %}
+{% block main-content %}
+<div class="container my-5">
+ <div class="row">
+  <div class="col-sm-5 text-center align-self-center">
+    <img src={{product.image}} alt={{product.image}} style="height:500px;object-fit:cover" class="img-fluid img-thumbnail">
+  </div>
+  <div class="col-sm-6 offset-sm-1">
+   <h3>{{product.brand}}</h3>
+   <p class="text-secondary lead">{{product.title}}</p>
+   <hr>
+   <h5 class="mt-2">Product Description</h5>
+   <ul>
+    {% for description in product.description %}
+    <li class="">{{description}}</li>
+    {% endfor %}
+   </ul>
+   <h4>Rs. {{product.discounted_price}} <small class="fw-light text-decoration-line-through">Rs. {{product.market_price}}</small></h4>
+   <h6 class="mt-3 mb-1">Sizes Available : </h6>
+   <ul>
+    {% for key, value in product.sizes_available.items %}
+    <li class="mb-0">{{key}}, Quantities - {{value}}</li>
+    {% endfor %}
+   </ul>
+    <form action="/seller_update_product/{{product.id}}" method="post">
+      {% csrf_token %}
+      <button type="submit" name="update" class="btn btn-secondary shadow px-3 py-2 mt-3">Update</button>
+      <button type="submit" name="remove" class="btn btn-danger shadow px-3 py-2 ms-4 mt-3">Remove</button>
+    </form>
+    <!-- <a href="#" name="update" class="btn btn-secondary shadow px-3 py-2 mt-3">Update</a>
+    <a href="#" name="remove" class="btn btn-danger shadow px-3 py-2 ms-4 mt-3">Remove</a> -->
+   <h5 class="mt-5">Available Offers</h5>
+   <ul>
+    <li>Bank Offer 5% Unlimited Cashback on Flipkart Axis Bank Credit</li>
+    <li>Special Price Get extra ₹3000 off (price inclusive of discount)</li>
+    <li>No cost EMI ₹1,667/month. Standard EMI also available</li>
+    <li>Partner Offer ₹2000 Flipkart Gift Card on Every 1000th Transaction with a new Visa Debit/Credit Card</li>
+   </ul>
+  </div>
+ </div>
+</div>
+{% endblock main-content %}

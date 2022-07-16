@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Register{% endblock title %}
+{% block main-content %}
+<div class="container">
+    <div class="row my-3">
+        <div class="col-sm-6 offset-sm-3">
+            <h3>Login</h3>
+            <hr>
+            <form action="register" method="post" class="shadow p-5">
+                {% csrf_token %}
+                {% for message in messages %}
+                <h6 class="text-center text-danger">{{message}}</h6>
+                {% endfor %}
+                <div class="mb-3">
+                    <label for="register_email" class="form-label">Email</label>
+                    <input type="email" class="form-control-login" name="register_email"
+                        aria-describedby="emailHelp">
+                </div>
+                <div class="mb-3">
+                    <label for="register_username" class="form-label">Username</label>
+                    <input type="text" class="form-control-login" name="register_username" aria-describedby="emailHelp">
+                </div>
+                <div class="mb-3">
+                    <label for="register_password1" class="form-label">Password</label>
+                    <input type="password" class="form-control-login" name="register_password1">
+                </div>
+                <div class="mb-3">
+                    <label for="register_password2" class="form-label">Confirm Password</label>
+                    <input type="password" class="form-control-login" name="register_password2" aria-describedby="emailHelp">
+                </div>
+                <input type="submit" class="btn btn-secondary mt-4" value="Register">
+                <br>
+                <br>
+                <div class="text-center text-primary fw-bold"><small>Existing User ? <a href="login" class="text-danger">Login Now</a>
+                    </small></div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock main-content %}

@@ -1,0 +1,250 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}View Products{% endblock title %}
+{% block main-content %}
+<input type="hidden" id="category" value={{category}}>
+<input type="hidden" id="sub_category" value={{sub_category}}>
+<div class="container my-5 mx-1">
+    <div class="row">
+        <div class="col-sm-2 border-end px-1">
+            <ul class="list-unstyled">
+                <div class="col 12 pb-3">
+                    <!-- col-md-4 -->
+                    <label for="inputState" class="form-label text-secondary"><strong>Sort</strong></label>
+                    <select id="sort" name="sort" class="form-select">
+                        <option selected disabled>Sort By</option>
+                        <option>Product name : A to Z</option>
+                        <option>Product name : Z to A</option>
+                        <option>Price : Low to High</option>
+                        <option>Price : High to Low</option>
+                    </select>
+                </div>
+
+                <div class="col 12 pb-3">
+                    <!-- col-md-4 -->
+                    <label for="filter" class="form-label text-secondary"><strong>Filter</strong></label>
+                    <select id="filter" name="filter" class="form-select">
+                        <option selected disabled>Filter By</option>
+                        <option>Brand</option>
+                        <option>Price</option>
+                    </select>
+                </div>
+                <div class="col 12 pb-3">
+                    <!-- col-md-4 -->
+                    <select id="range" name="range" class="form-select">
+                        <option selected disabled>Range</option>
+                    </select>
+                </div>
+            </ul>
+        </div>
+        <div class="col-sm-9 offset-sm-1">
+            <div class="row" id="products_list">
+                {% for product, properties in products.items %}
+                <div class="col-md-6 col-lg-4 mb-4 mb-md-4">
+                    <a href={{properties.id}} style="text-decoration:none;">
+                        <div class="card text-black">
+                            <img src="{% static properties.image %}" class="card-img-top" alt={{properties.image}}
+                                height="300px" style="object-fit:cover;" />
+
+                            <div class="card-body-height">
+                                <div class="d-flex justify-content-between mb-0">
+                                    <p class="mb-0 text-secondary"><strong>{{properties.brand}}</strong></p>
+                                </div>
+
+                                <div class="d-flex justify-content-between mb-0">
+                                    <!-- <p class="mb-0 text-secondary">{{properties.title}}</p> -->
+                                    {% if properties.title|length <= 30 %} <p class="mb-0 text-secondary">
+                                        {{properties.title}}</p>
+                                        {% else %}
+                                        <p class="mb-0 text-secondary">{{properties.title|slice:":28"}}...</p>
+                                        {% endif %}
+                                </div>
+
+                                <div class="d-flex justify-content-start mb-0">
+                                    <p class="text-secondary mb-0"><strong><span>Rs.
+                                                {{properties.discounted_price}}</span></strong></p>
+                                    <p class="text-secondary mb-0 px-1"><s>Rs. {{properties.market_price}}</s></p>
+                                    <p class="text-danger mb-0 px-1">({{properties.discount}}% OFF)</p>
+                                </div>
+
+                                <div class="d-flex justify-content-between mb-1">
+                                    <!-- <p class="text-secondary mb-0">Sizes: <span
+                                            class="">{{properties.sizes_available}}</span></p> -->
+                                    {% if properties.sizes_available|length <= 59 %} <p class="text-secondary mb-0">
+                                        Sizes: <span class="">{{properties.sizes_available}}</span></p>
+                                        {% else %}
+                                        <p class="text-secondary mb-0">Sizes: <span
+                                                class="">{{properties.sizes_available|slice:":57"}}...</span></p>
+                                        {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+    $("#filter").change(function () {
+        const url = "/filter_load"
+        const filter = $(this).val();
+        const category = $('#category').val();
+        const sub_category = $('#sub_category').val();
+        console.log(filter);
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {
+                'filter': filter,
+                'category': category,
+                'sub_category': sub_category,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            success: function (data) {
+                let temp = "<option selected disabled>Range</option>";
+                temp += "\n";
+                for (const [key, value] of Object.entries(data.ranges)) {
+                    temp += "<option>" + value + "</option>";
+                    temp += "\n";
+                }
+                $("#range").html(temp);
+            }
+        });
+
+    });
+</script>
+<script>
+    $("#sort").change(function () {
+        const sort_type = $(this).val();
+        const filter_type = $('#filter').val();
+        const range = $('#range').val();
+        const category = $('#category').val();
+        const sub_category = $('#sub_category').val();
+        console.log(category);
+        console.log(sub_category);
+        const url = "/view_customized_products/" + category + "/" + sub_category;
+        console.log(url);
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {
+                'sort_type': sort_type,
+                'filter_type': filter_type,
+                'range': range,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            success: function (data) {
+                let temp = '';
+                for (const [key, value] of Object.entries(data)) {
+                    temp +=
+                        `
+                    <div class="col-md-6 col-lg-4 mb-4 mb-md-4">
+                    <a href=`+ value.id + ` style="text-decoration:none;">
+                        <div class="card text-black">
+                            <img src=`+ value.image + ` class="card-img-top" alt="iPhone" height="300px"
+                                style="object-fit:cover;" />
+
+                            <div class="card-body-height">
+                                <div class="d-flex justify-content-between mb-0">
+                                    <p class="mb-0 text-secondary"><strong>`+ value.brand + `</strong></p>
+                                </div>
+
+                                <div class="d-flex justify-content-between mb-0">
+                                    <p class="mb-0 text-secondary">`+ value.title + `</p>
+                                </div>
+
+                                <div class="d-flex justify-content-start mb-0">
+                                    <p class="text-secondary mb-0"><strong><span>Rs.
+                                                `+ value.discounted_price + `</span></strong></p>
+                                    <p class="text-secondary mb-0 px-1"><s>Rs. `+ value.market_price + `</s></p>
+                                    <p class="text-danger mb-0 px-1">(`+ value.discount + `% OFF)</p>
+                                </div>
+
+                                <div class="d-flex justify-content-between mb-1">
+                                    <p class="text-secondary mb-0">Sizes: <span
+                                            class="">`+ value.sizes_available + `</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                `;
+                    temp += "\n";
+                }
+                $("#products_list").html(temp);
+            }
+        });
+
+    });
+</script>
+
+
+<script>
+    $("#range").change(function () {
+        const category = $('#category').val();
+        const sub_category = $('#sub_category').val();
+        console.log(category);
+        console.log(sub_category);
+        const url = "/view_customized_products/" + category + "/" + sub_category;
+        const sort_type = $('#sort').val();
+        const filter_type = $('#filter').val();
+        const range = $('#range').val();
+        console.log(filter_type)
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {
+                'sort_type': sort_type,
+                'filter_type': filter_type,
+                'range': range,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            success: function (data) {
+                let temp = '';
+                for (const [key, value] of Object.entries(data)) {
+                    temp +=
+                        `
+                    <div class="col-md-6 col-lg-4 mb-4 mb-md-4">
+                    <a href=`+ value.id + ` style="text-decoration:none;">
+                        <div class="card text-black">
+                            <img src=`+ value.image + ` class="card-img-top" alt="iPhone" height="300px"
+                                style="object-fit:cover;" />
+
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between mb-0">
+                                    <p class="mb-0 text-secondary"><strong>`+ value.brand + `</strong></p>
+                                </div>
+
+                                <div class="d-flex justify-content-between mb-0">
+                                    <p class="mb-0 text-secondary">`+ value.title + `</p>
+                                </div>
+
+                                <div class="d-flex justify-content-start mb-0">
+                                    <p class="text-secondary mb-0"><strong><span>Rs.
+                                                `+ value.discounted_price + `</span></strong></p>
+                                    <p class="text-secondary mb-0 px-1"><s>Rs. `+ value.market_price + `</s></p>
+                                    <p class="text-danger mb-0 px-1">(`+ value.discount + `% OFF)</p>
+                                </div>
+
+                                <div class="d-flex justify-content-between mb-1">
+                                    <p class="text-secondary mb-0">Sizes: <span
+                                            class="">`+ value.sizes_available + `</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                `;
+                    temp += "\n";
+                }
+                $("#products_list").html(temp);
+            }
+        });
+
+    });
+</script>
+
+{% endblock main-content %}

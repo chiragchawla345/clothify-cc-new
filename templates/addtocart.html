@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load filter %}
+{% block title %}Cart{% endblock title %}
+{% block main-content %}
+<div class="container my-5">
+  <div class="row">
+    <h2 class="text-center mb-2">Clothify Cart</h2>
+
+    {% for message in messages %}
+    {% if message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+    <h5 class="text-center mb-5" style="color:#00cc66">{{message}}</h5>
+    {% endif %}
+    {% endfor %}
+    <div class="col-sm-8">
+      <div class="card">
+        <div class="card-body">
+
+          {% for key, value in cart.items %}
+          <div class="row">
+            <div class="col-sm-3 text-center align-self-center"><img src={{value.image}} alt="" srcset=""
+                class="img-fluid img-thumbnail shadow-sm" height="150" width="150"> </div>
+            <div class="col-sm-9">
+              <div>
+                <h5>{{value.title}}</h5>
+                <p class="mb-0 text-muted">Description: </p>
+                {% for description_line in value.description %}
+                <p class="mb-0 text-muted small">{{description_line}}</p>
+                {% endfor %}
+                <p class="mt-2 mb-0">Size : {{value.size}}</p>
+                <p id="price_{{value.product_id}}" class="mt-2 mb-0">Rs. {{value.price}}</p>
+                <div class="my-3">
+                  <label for="quantity">Quantity:</label>
+                  <a value={{value.product_id}} class="minus-cart btn"><i class="fas fa-minus-square fa-lg"></i></a>
+                  <!-- <span id="0">{{value.quantity}}</span> -->
+                  <span id={{value.product_id}}>{{value.quantity}}</span>
+                  <a value={{value.product_id}} class="plus-cart btn"><i class="fas fa-plus-square fa-lg"></i></a>
+                </div>
+                {% for message in messages %}
+                {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                {% if message|split_second:";" == value.product_id|split_first:";" %}
+                <h6 class="text-start mb-5 text-danger">{{message|split_first:";"}}</h6>
+                {% endif %}
+                {% endif %}
+                {% endfor %}
+                <div class="d-flex justify-content-between">
+                  <form action="/addtocart" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="product_id" value={{value.product_id}}></input>
+                    <button name="remove_item" class="btn btn-sm btn-secondary mr-3">Remove item </button>
+                  </form>
+                  <!-- <a href="#" class="btn btn-sm btn-secondary mr-3">Remove item </a> -->
+                  <p id="new_price_{{value.product_id}}" class="mb-0"><span><strong>Rs.
+                        {{value.total_price}}</strong></span></p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr class="text-muted">
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-4">
+      <div class="card">
+        <div class="card-body">
+          <h3>The Total Amount of</h3>
+          <ul class="list-group">
+            <li id="total_sum" class="list-group-item border-0 px-0 py-1"><span>Amount : Rs. {{total_sum}}</span></li>
+            <li class="list-group-item border-0 px-0 py-1"><span>Shipping : Rs. 70.00</span></li>
+            <li class="list-group-item border-0 px-0 py-1 mb-3">
+              <div id="total_sum_with_delivery">
+                <span><strong>Total Amount</strong> <small> (including GST) : Rs.
+                  </small>{{total_sum_with_delivery}}</span>
+              </div>
+              <!-- <span><strong>Rs. 500.00</strong></span> -->
+            </li>
+          </ul>
+          <div class="d-grid">
+            <!-- <form action="/addtocart" method="post">
+          {% csrf_token %}
+          <buttom name="place_order" class="btn btn-danger">Place Order</button>
+        </form> -->
+            <form action="/select_an_address" method="post">
+              {% csrf_token %}
+              <input type="hidden" name="order_type" value="cart"></input>
+              <button name="continue" class="btn btn-sm btn-secondary mr-3">Continue</button>
+            </form>
+            <!-- <a href="#" class="btn btn-danger">Place Order</a> -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-8">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="mb-4">We accept</h5>
+          <img src="{% static 'images/payment.png' %}" alt="" class="img-fluid">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $(".minus-cart").click(function (e) {
+      product_id = e.currentTarget.attributes.value.value
+      let quantity = parseInt($('#' + product_id).html());
+      let price = parseInt($('#price_' + product_id).html().substring(4));
+      $.ajax({
+        type: 'POST',
+        url: '/updatecart',
+        data: {
+          'quantity': quantity,
+          'product': product_id,
+          'type': 'decrement',
+          csrfmiddlewaretoken: '{{ csrf_token }}'
+        },
+        success: function (data) {
+          if (data.includes("success") == true) {
+            quantity = quantity - 1;
+            price = price * quantity;
+            let total_sum = parseInt(data.substring(7));
+            let total_sum_with_delivery = total_sum + 70;
+            $('#' + product_id).html(quantity);
+            $('#new_price_' + product_id).html("<span><strong>Rs. " + price + "</strong></span>");
+            $('#total_sum').html('<span>Amount : Rs. ' + total_sum + '</span>');
+            $('#total_sum_with_delivery').html('<span><strong>Total Amount</strong> <small> (including GST) : Rs. </small>' + total_sum_with_delivery + '</span>')
+          }
+        }
+      });
+    });
+  });
+  $(document).ready(function () {
+    $(".plus-cart").click(function (e) {
+      product_id = e.currentTarget.attributes.value.value
+      let quantity = parseInt($('#' + product_id).html());
+      let price = parseInt($('#price_' + product_id).html().substring(4));
+      let total_sum = parseInt($('#total_sum').html());
+
+      $.ajax({
+        type: 'POST',
+        url: '/updatecart',
+        data: {
+          'quantity': quantity,
+          'product': product_id,
+          'type': 'increment',
+          csrfmiddlewaretoken: '{{ csrf_token }}'
+        },
+        success: function (data) {
+          if (data.includes("success") == true) {
+            quantity = quantity + 1;
+            price = price * quantity;
+            total_sum = parseInt(data.substring(7));
+            total_sum_with_delivery = total_sum + 70;
+            $('#' + product_id).html(quantity);
+            $('#new_price_' + product_id).html("<span><strong>Rs. " + price + "</strong></span>");
+            $('#total_sum').html('<span>Amount : Rs. ' + total_sum + '</span>');
+            $('#total_sum_with_delivery').html('<span><strong>Total Amount</strong> <small> (including GST) : Rs. </small>' + total_sum_with_delivery + '</span>');
+          }
+        }
+      });
+    });
+  });
+
+</script>
+{% endblock main-content %}

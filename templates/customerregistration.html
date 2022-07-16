@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Customer Registration{% endblock title %}
+{% block main-content %}
+<div class="container">
+ <div class="row my-3">
+  <div class="col-sm-6 offset-sm-3">
+   <h3>Customer Registration</h3>
+   <hr>
+   <form action="register" method="post" class="shadow p-5">
+      {% csrf_token %}
+      {% for message in messages %}
+         <h6 class="text-center text-danger">{{message}}</h6>
+      {% endfor %}
+      <div class="mb-3">
+      <label for="inputEmail4" class="form-label">Email</label>
+      <input type="email" class="form-control-login" name="email">
+      </div>
+      <div class="mb-3">
+         <label for="inputUser1" class="form-label">Username</label>
+         <input type="email" class="form-control-login" name="username">
+      </div>
+      <div class="mb-3">
+      <label for="inputPassword1" class="form-label">Password</label>
+      <input type="password" class="form-control-login" name="password1">
+      </div>
+      <div class="mb-3">
+      <label for="inputPassword2" class="form-label">Confirm Password</label>
+      <input type="password" class="form-control-login" name="password2">
+      </div>
+      <div class="text-start">
+      <button type="button" class="btn btn-secondary mt-4">Submit</button>
+      </div>
+      <br>
+      <div class="text-center text-primary fw-bold"><small>Existing User ? <a href="login"
+         class="text-danger">Login Now</a> </small></div>
+   </form>
+  </div>
+ </div>
+</div>
+{% endblock main-content %}

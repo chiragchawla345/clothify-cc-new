@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}View Products{% endblock title %}
+{% block main-content %}
+<div class="container my-5 mx-1">
+    <div class="row">
+        <h5>Welcome {{user}}</h5>
+        <div class="col-sm-2 border-end px-1">
+            <ul class="list-unstyled">
+                <li class="d-grid"><a href="{% url 'seller_view_products' %}" class="btn btn-secondary">View yours products</a></li>
+                <li class="d-grid"><a href="{% url 'seller_new_product' %}" class="btn">Add a product</a></li>
+            </ul>
+        </div>
+        <div class="col-sm-9 offset-sm-1">
+            <div class="row">
+                {% for product, properties in products.items %}
+                    <div class="col-md-6 col-lg-4 mb-4 mb-md-4">
+                        <a href={{properties.id}} style="text-decoration:none;">
+                        <div class="card text-black">
+                            <img src={{properties.image}}
+                                class="card-img-top" alt="iPhone" height="300px" style="object-fit:cover;" />
+                    
+                            <div class="card-body-height">
+                                <div class="d-flex justify-content-between mb-0">
+                                    <p class="mb-0 text-secondary"><strong>{{properties.brand}}</strong></p>
+                                </div>
+                    
+                                <div class="d-flex justify-content-between mb-0">
+                                    {% if properties.title|length <= 28 %}
+                                    <p class="mb-0 text-secondary">{{properties.title}}</p>
+                                    {% else %}
+                                    <p class="mb-0 text-secondary">{{properties.title|slice:":26"}}...</p>
+                                    {% endif %}
+                                </div>
+                    
+                                <div class="d-flex justify-content-start mb-0">
+                                    <p class="text-secondary mb-0"><strong><span>Rs. {{properties.discounted_price}}</span></strong></p>
+                                    <p class="text-secondary mb-0 px-1"><s>Rs. {{properties.market_price}}</s></p>
+                                    <p class="text-danger mb-0 px-1">({{properties.discount}}% OFF)</p>
+                                </div>
+                    
+                                <div class="d-flex justify-content-between mb-1">
+                                    {% if properties.sizes_available|length <= 59 %}
+                                    <p class="text-secondary mb-0">Sizes: <span class="">{{properties.sizes_available}}</span></p>
+                                    {% else %}
+                                    <p class="text-secondary mb-0">Sizes: <span class="">{{properties.sizes_available|slice:":57"}}...</span></p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock main-content %}

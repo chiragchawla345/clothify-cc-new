@@ -1,0 +1,1 @@
+web: gunicorn clothify.wsgi --log-file-

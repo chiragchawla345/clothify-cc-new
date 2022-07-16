@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Home{% endblock title %}
+{% block main-content %}
+<div class="container my-5 mx-1">
+    <div class="row">
+        <h5>Welcome {{user}}</h5>
+        <div class="col-sm-2 border-end px-1">
+            <ul class="list-unstyled">
+                <li class="d-grid"><a href="{% url 'profile' %}" class="btn btn-secondary">Profile</a></li>
+                <li class="d-grid"><a href="{% url 'address' %}" class="btn">Address</a></li>
+            </ul>
+        </div>
+        <div class="col-sm-8 offset-sm-1">
+            <form action="profile" method="post">
+                {% csrf_token %}
+                {% for message in messages %}
+                <h6 class="text-danger text-center">{{message}}</h6>
+                {% endfor %}
+                <div class="col-12 pb-3">
+                    <label for="inputName" class="form-label">Name*</label>
+                    <input type="text" class="form-control-login" id="inputName" name="name"
+                        placeholder="Enter your name">
+                </div>
+                <div class="col-12 pb-3">
+                    <label for="inputAddress" class="form-label">Address Line 1*</label>
+                    <input type="text" class="form-control-login" id="inputAddress" name="address1"
+                        placeholder="Enter address line 1">
+                </div>
+                <div class="col-12 pb-3">
+                    <label for="inputAddress2" class="form-label">Address Line 2</label>
+                    <input type="text" class="form-control-login" id="inputAddress2" name="address2"
+                        placeholder="Enter address line 1">
+                </div>
+                <div class="col-12 pb-3">
+                    <label for="inputCountry" class="form-label">Country*</label>
+                    <select id="inputCountry" name="country" class="form-select">
+                        <option selected disabled>Select Country</option>
+                        {% for country in countries %}
+                        <option>{{country}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col 12 pb-3">
+                    <!-- col-md-4 -->
+                    <label for="inputState" class="form-label">State*</label>
+                    <select id="inputState" name="state" class="form-select">
+                        <option selected disabled>Select State</option>
+                        {% for city in cities %}
+                        <option>{{city}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-12 pb-3">
+                    <label for="inputCity" class="form-label">City*</label>
+                    <input type="text" class="form-control-login" id="inputCity" name="city" placeholder="Enter city">
+                </div>
+                <div class="col-12 pb-3">
+                    <!-- col-md-2 -->
+                    <label for="inputZip" class="form-label">Zip*</label>
+                    <input type="text" class="form-control-login" id="inputZip" name="zip" placeholder="Enter zipcode">
+                </div>
+                <div class="col-12 mt-3">
+                    <button type="submit" class="btn btn-danger">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+    $("#inputCountry").change(function () {
+        const url = "states_load"
+        const countryId = $(this).val();
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {
+                'country_id': countryId,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            success: function (data) {
+                let temp = "<option selected disabled>Select State</option>";
+                temp += "\n";
+                for (const [key, value] of Object.entries(data.states)) {
+                    temp += "<option>" + value + "</option>";
+                    temp += "\n";
+                }
+                $("#inputState").html(temp);
+            }
+        });
+
+    });
+</script>
+
+{% endblock main-content %}
